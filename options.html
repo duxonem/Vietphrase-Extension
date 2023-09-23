@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Vietphrase converter Settings</title>
+  <script src="options.js" defer></script>
+  <style>
+    body>div {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    fieldset {
+      flex-grow: 1;
+      flex-shrink: 1;
+      flex-basis: 30rem;
+      min-width: 20em;
+      line-height: 1.6rem;
+    }
+
+    textarea {
+      width: 99%;
+      height: 4em;
+      resize: none;
+    }
+
+    input[type="checkbox"]+input[type="text"] {
+      color: gray;
+      pointer-events: none;
+    }
+
+    input[type="checkbox"]:checked+input[type="text"] {
+      color: revert;
+      pointer-events: revert;
+    }
+
+    input[type="checkbox"]+textarea {
+      color: gray;
+      pointer-events: none;
+    }
+
+    input[type="checkbox"]:checked+textarea {
+      color: revert;
+      pointer-events: revert;
+    }
+
+    input[type="checkbox"]+input[type="number"] {
+      color: gray;
+      pointer-events: none;
+    }
+
+    input[type="checkbox"]:checked+input[type="number"] {
+      color: revert;
+      pointer-events: revert;
+    }
+
+    /* input[type="checkbox"]+input {
+      color: gray;
+      pointer-events: none;
+    }
+
+    input[type="checkbox"]:checked+input {
+      color: revert;
+      pointer-events: revert;
+    } */
+
+    #vert_line {
+      width: 100%;
+      height: 1px;
+      background-color: black;
+
+    }
+  </style>
+
+</head>
+
+<body>
+  <div>
+    <fieldset id="Options">
+      <legend>Options</legend>
+
+      <input type="checkbox" id="optionNgoac" class="Options">Dùng ngoặc cho [Vietphrase]<br>
+      <input type="checkbox" id="optionMotnghia" class="Options">Vietphrase một nghĩa.
+      <br><span style="margin-left: 1.5em;">Dấu cách giữa các nghĩa <input type="text" size="4" id="optionDaucach"
+          placeholder="Vd: / ; |" class="Options"></span><br>
+      <input type="checkbox" id="optionSp" class="Options">Dùng StrucPhrase
+      <span><br><input type="checkbox" id="optionSpNgoac" class="Options" style="margin-left: 1.5em;">Dùng
+        ngoặc cho &lt;StrucPhrase&gt;
+      </span><br>
+      <input type="checkbox" id="optionXoaDich" class="Options">Xóa chữ Đích, Liễu, Trứ<br>
+      <input type="checkbox" id="optionThayfont" class="Options">Thay font mặc định bằng font <input type="text"
+        id="optionFont" class="Options" sixe="8" value="Roboto"><br>
+      <input type="checkbox" id="optionAutoTrans" class="Options">Xóa nút [Translate], tự động dịch ngoại trừ các
+      websites:
+      <textarea id="optionWebsites" class="Options" spellcheck="false">qidian.com</textarea>
+
+    </fieldset>
+
+    <fieldset id="Dicts">
+      <legend title="Các từ điển này được lưu vào trình duyệt của bạn">Các từ điển cần thiết</legend>
+
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileVP">Vietphrase</label>
+          <input type="file" id="inFileVP"></span>
+      </div>
+
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileNames">Names</label>
+          <input type="file" id="inFileNames"></span>
+      </div>
+
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFilePhienAm">Phiên Âm</label>
+          <input type="file" id="inFilePhienAm"></span>
+      </div>
+
+      <div>
+        <span title="Bấm để tải từ điển từ máy tính của bạn"><label for="inFileStrucPhrase">StrucPhrase</label>
+          <input type="file" id="inFileStrucPhrase"></span>
+      </div>
+      <div id="vert_line"></div>
+      <div>
+        <input type="checkbox" id="optionNgayLuu" class="Options">Tự động lưu từ điển sau mỗi<input type="number"
+          id="optionDays" class="Options" step="1" min="1" value="4" size='4'>ngày<br>
+        <input type="checkbox" id="optionNameFile" class="Options">Tên file lưu các từ điển<input type="text"
+          id="optionDictName" value="VPDicts" class="Options" size="12">yyyymmdd.zip
+        <br>
+      </div>
+    </fieldset>
+  </div>
+  <button> Lưu </button>
+
+</body>
+
+</html>

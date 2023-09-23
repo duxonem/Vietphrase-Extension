@@ -1,0 +1,1 @@
+document.getElementById('exportDicts').onclick = () => { chrome.runtime.sendMessage({ 'action': 'exportDicts', 'payload': '' }); console.log('CLicked') }

@@ -9,7 +9,7 @@ Extension này hỗ trợ lưu file từ điển trong trình duyệt (indexedDB
 
 Trong đó nếu cụm từ đầu hoặc cuối đứng ngoài cùng có thể ký hiệu là {N} (hoặc {Nsố} dùng cho Name), {V} (dùng cho Name+VP), và {số} (dùng cho cụm từ dài nhất có thể). Những cụm tìm  kiếm nhưng không nằm ngoài cùng thì {N}, {V} xử lý như {số}.
 
-Có thể bôi đen 1 cụm từ, bấm chuột phải và chọn "Edit Name" hoặc "Edit Vietphrase". Điểu này rất thuận lợi vì giúp bạn vừa xem truyện ngay trên trang web gốc, vừa thêm/sửa dữ liệu của bạn.
+Có thể bôi đen 1 cụm từ, bấm chuột phải và chọn "Edit Name" hoặc "Edit Vietphrase". Điểu này rất thuận lợi vì giúp bạn vừa xem truyện ngay trên trang web gốc, vừa thêm/sửa dữ liệu của bạn. Nếu dùng Strucphrase thì sẽ không thể Edit Name/Vietphrase.
 
 Chức năng export từ điển để lưu chỗ khác bị đang bị lỗi, khi chạy thử không lỗi, sau khi đăng ký với Firefox bị lỗi, sẽ sửa lại sau
 

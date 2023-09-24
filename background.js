@@ -212,7 +212,7 @@ function transWOrder(text, Ngoac = true, Motnghia = false, Daucach = ';', XoaDic
         }
     })
 
-    if (XoaDich) DichLieuTru.forEach(dich => text = text.replaceAll(dich, ''));
+    if (XoaDich) DichLieuTru.forEach(dich => text = text.replaceAll(dich, '\u0528'));
 
     let textPA = text.replaceAll(/\u0528/g, '');
     textPA.split('').forEach(Han => {

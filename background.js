@@ -238,6 +238,7 @@ function transWOrder(text, Ngoac = true, Motnghia = false, Daucach = ';', XoaDic
 
     resultArr.reduce((pos, el) => {
         el.vietPos = pos;
+        if (!el.dict && pos == 0) pos++;
         if (el.dict) pos = pos + el.transText.length;
         pos++; // 1 do ' '
         return pos;

@@ -52,10 +52,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 function translate(text) {
     let result;
-    console.time('Translate time');
     if (Options.optionSp) result = VPTrans(strucTrans(text, Options.optionSpNgoac));
     else result = VPTrans(text);
-    console.timeEnd('Translate time');
     return result;
 }
 
@@ -354,25 +352,19 @@ function editPhrase(payload, dict) {
     if (!payload) return;
     if (payload.Viet != payload.Trung || !(/[\u3400-\u9FBF]+/.test(payload.Viet))) {
         transArr = transWOrder(payload.Trung);
-        console.log(transArr.transText);
-        console.log(transArr);
         if (payload.start > payload.end) [payload.start, payload.end] = [payload.end, payload.start]
         trungArr1 = transArr.filter(el => el.vietPos <= payload.end);
         trungArr = trungArr1.filter(el => el.vietPos >= payload.start);
         if (trungArr.length == 0) trungArr.push(trungArr1.pop());
-        //if (trungArr[0].vietPos > payload.start && !(/[\s\'\".?!,。！？“”，：]/.test(trungArr[0]))) trungArr.unshift(transArr[transArr.indexOf(trungArr[0]) - 1]);
         if (trungArr[0].vietPos > payload.start) trungArr.unshift(transArr[transArr.indexOf(trungArr[0]) - 1]);
 
         textTrung = trungArr.reduce((txt, el) => txt += el.orgText, '');
     } else textTrung = payload.Trung;
 
-    console.log(textTrung);
-
     let phienam = transPhienAm(textTrung);
     let trans = '';
     if (dict == 'Names') trans = transPhienAm(textTrung)
     else trans = VPTrans(textTrung, false);
-    console.log(textTrung, trans);
     let query = `?dict=${dict}&trung=${encodeURIComponent(textTrung)}&phienam=${encodeURIComponent(phienam)}&trans=${encodeURIComponent(trans)}`;
     browser.windows.create({ focused: true, left: 300, top: 300, width: 500, height: 200, type: 'popup', url: 'editphrase.html' + query })
 }
@@ -391,11 +383,9 @@ function exportDicts() {
 
     if (!Options['optionNgayLuu']) fileName = 'VPDicts' + (new Date()).toISOString().slice(0, 10).replace(/-/g, '') + '.zip';
     else fileName = (Options['optionDictName'] || 'VPDicts') + (new Date()).toISOString().slice(0, 10).replace(/-/g, '') + '.zip';
-    zip.generateAsync({ type: "base64" }).then((content) => {
-        //window.open("data:application/zip;base64," + content); // 1. worked
-
-        browser.downloads.download({         //2. worker with permissions:["downloads"]
-            url: "data:application/zip;base64," + content,
+    zip.generateAsync({ type: "blob" }).then((content) => {
+        browser.downloads.download({
+            url: URL.createObjectURL(content),
             filename: fileName,
             saveAs: true
         }, () => console.log('Start download'));
@@ -435,8 +425,6 @@ loadData().then(() => {
 
 browser.contextMenus.onClicked.addListener((info, tab) => {
     switch (info.menuItemId) {
-        // case 'editVP': chrome.tabs.sendMessage(tab.id, { "action": "sendVP", "payload": info.selectionText },
-        //     { frameId: info.frameId }).then(mess => editPhrase(mess.payload, 'VP')); break;
         case 'editName': browser.tabs.query({ active: true, currentWindow: true }).then((tabs) =>
             browser.tabs.sendMessage(tabs[0].id, { "action": "sendName", "payload": info.selectionText },
                 { frameId: info.frameId }).then(mess => editPhrase(mess.payload, 'Names'))); break;

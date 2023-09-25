@@ -23,7 +23,6 @@ function getTextFromSelection(text) { //chi xet trong 1 node
         result.Viet = result.selection;
         result.Trung = result.selection;
         result.mySelection = result.selection;
-        console.log(result);
         return result;
     }
     if (!selection.anchorNode.origin) return false; //Khong co tieng trung, chua tung dich ||selection.anchorNode.isTranslated
@@ -51,7 +50,6 @@ function getTextFromSelection(text) { //chi xet trong 1 node
     if (result.start > result.end) [result.start, result.end] = [result.end, result.start];
     result.Viet = result.Viet.trim();
     result.Trung = result.Trung.trim();
-    console.log(result);
     return result;
 }
 
@@ -72,7 +70,6 @@ let firstTrans = true;
 async function translateNode(rootNode) {
     let nodesText = '';
     const limiter = '\uf0f3'.repeat(1);
-    console.time('Total translating and rendering time');
     function nodeToArr(node) {
         if (!node) return;
         if (node.tagName == 'SCRIPT') return;
@@ -84,10 +81,7 @@ async function translateNode(rootNode) {
         }
         node.childNodes?.forEach((childNode) => nodeToArr(childNode))
     }
-    console.time('Get text node time');
     nodeToArr(rootNode);
-    console.timeEnd('Get text node time')
-    console.log(`nodes to tranlate: ${nodeArr.length}`);
     if (Options.optionThayfont && firstTrans) {
         firstTrans = false;
         const font = Options.optionFont.split(/[;,]/).filter(e => e != '').join() + ', Arial !important';
@@ -95,10 +89,8 @@ async function translateNode(rootNode) {
         style.appendChild(document.createTextNode(`body {font-family: ${font}; word-break:break-word;text-overflow:ellipsis;}`));
         document.head.appendChild(style);
     }
-    console.time('translate time from Content view');
+
     chrome.runtime.sendMessage({ 'action': 'translate', 'payload': nodesText }, (mess) => {
-        console.timeEnd('translate time from Content view');
-        console.time('Text to Node time');
         let textArr = mess.payload.split(limiter);
         textArr.forEach((text, index) => {
             const marks = ['.', '?', '!', '\r', '<br>', '。', '！', '？', '“', '”', ':', '：'];
@@ -120,11 +112,7 @@ async function translateNode(rootNode) {
                 nodeArr[index].textContent = text;
             }
         });
-        console.timeEnd('Text to Node time');
-        console.time('reStyle time');
         reStyle(rootNode);  ///reStyle ton nhieu thoi gian nhat, gap 10x thoi gian translat
-        console.timeEnd('reStyle time');
-        console.timeEnd('Total translating and rendering time');
     })
 }
 

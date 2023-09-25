@@ -19,3 +19,4 @@ Chức năng export từ điển để lưu chỗ khác bị đang bị lỗi, k
 
 Sau đó vào Option để cài đặt các thiết lập và tải các từ điển lên rồi bấm nút Lưu.
 
+https://streamable.com/851s4v

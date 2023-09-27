@@ -89,9 +89,9 @@ function firstRun() {
 function optionsToPage() {
     if (tmpOptions) {
         Object.keys(tmpOptions).forEach(option => {
-        if ($(option).tagName == 'TEXTAREA') $(option).value = tmpOptions[option]; else
-            if ($(option).type == 'checkbox') $(option).checked = tmpOptions[option];
-            else $(option).value = tmpOptions[option];
+            if ($(option)?.tagName == 'TEXTAREA') $(option).value = tmpOptions[option]; else
+                if ($(option).type == 'checkbox') $(option).checked = tmpOptions[option];
+                else $(option).value = tmpOptions[option];
         })
         if (!tmpOptions['optionLastSavedTime']) tmpOptions['optionLastSavedTime'] = new Date();
     }
@@ -117,8 +117,8 @@ function loadOptions() {
 function saveData() {
     const request = indexedDB.open("QTlikedWebExt", 1);
     document.querySelectorAll('.Options').forEach((el) => {
-    if (el.tagName == "TEXTAREA") tmpOptions[el.id] = el.value; else
-        if (el.type == 'checkbox') tmpOptions[el.id] = el.checked; else tmpOptions[el.id] = el.value;
+        if (el.tagName == "TEXTAREA") tmpOptions[el.id] = el.value; else
+            if (el.type == 'checkbox') tmpOptions[el.id] = el.checked; else tmpOptions[el.id] = el.value;
     });
 
     let count = 0;

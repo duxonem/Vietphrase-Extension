@@ -52,8 +52,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 function translate(text) {
     let result;
-    if (Options.optionSp) result = VPTrans(strucTrans(text, Options.optionSpNgoac));
-    else result = VPTrans(text);
+    if (Options.optionSp) result = VPTrans(strucTrans(text, Options.optionSpNgoac), Options.optionNgoac, Options.optionMotnghia, Options.optionDaucach, Options.optionXoaDich);
+    else result = VPTrans(text, Options.optionNgoac, Options.optionMotnghia, Options.optionDaucach, Options.optionXoaDich);
     return result;
 }
 

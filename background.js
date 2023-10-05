@@ -24,7 +24,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 dictVP.Han.push(message.payload.orgText);
                 dictVP.Han.sort((a, b) => b.length - a.length || a.localeCompare(b));
             }
-        })(); return true;
+        })(); payload = ''; break;// return true;
 
         case 'from Edit page with hate': (() => {
             if (message.payload.dict == 'Names') {
@@ -35,7 +35,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 delete dictVP.HanViet[message.payload.orgText];
                 dictVP.Han.splice(dictVP.Han.indexOf(message.payload.orgText), 1);
             }
-        })(); return true;
+        })(); payload = ''; break; //return true;
 
         case 'exportDicts': exportDicts(); return true;
 
@@ -373,6 +373,25 @@ function dictToRaw(dict) {
     return dict.Han.reduce((t, han) => t += `${han}=${dict.HanViet[han]}\n`, '')
 }
 
+function saveData() {
+    const request = indexedDB.open("QTlikedWebExt", 1);
+    let tmpDicts = []; tmpDicts['Names'] = dictNames; tmpDicts['VP'] = dictVP; tmpDicts['Options'] = Options;
+    let count = 0;
+    request.onsuccess = () => {
+        dbase = request.result;
+        let dickNames = Object.keys(tmpDicts);
+        dickNames.forEach(dictName => {
+            count++;
+            dbase.transaction('dataStore', 'readwrite').objectStore('dataStore').put({ name: dictName, data: JSON.stringify(tmpDicts[dictName]) }).onsuccess = function (e) {
+                if (dictName == 'Names') chrome.storage.local.remove('dictNames');
+                if (dictName == 'VP') chrome.storage.local.remove('dictVP');
+                console.log(`save ${dictName} successfuly`);
+                count--;
+            }
+        });
+    }
+}
+
 function exportDicts() {
     let zip = new JSZip();
     Options.optionLastSavedTime = new Date();
@@ -383,6 +402,8 @@ function exportDicts() {
 
     if (!Options['optionNgayLuu']) fileName = 'VPDicts' + (new Date()).toISOString().slice(0, 10).replace(/-/g, '') + '.zip';
     else fileName = (Options['optionDictName'] || 'VPDicts') + (new Date()).toISOString().slice(0, 10).replace(/-/g, '') + '.zip';
+
+    saveData(); //save Names, VP, Options to indexedDB
     zip.generateAsync({ type: "blob" }).then((content) => {
         browser.downloads.download({
             url: URL.createObjectURL(content),
@@ -397,6 +418,8 @@ function autoSaveDicts() {
 }
 
 function updateContextMenus() {
+    try { browser.contextMenus.remove('editVP'); browser.contextMenus.remove('editName'); }
+    catch { }
     if (!Options.optionSp) {
         const editName = browser.contextMenus.create({
             'id': 'editName',
@@ -409,7 +432,7 @@ function updateContextMenus() {
             "contexts": ["selection"],
             "title": "Edit Vietphrase",
         });
-    } else { browser.contextMenus.remove('editVP'); browser.contextMenus.remove('editName'); }//remove menus
+    }
 }
 
 browser.runtime.onInstalled.addListener(({ reason }) => { if (reason == 'install') browser.tabs.create({ url: "options.html" }) });

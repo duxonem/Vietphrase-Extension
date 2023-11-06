@@ -60,7 +60,7 @@ function isOverflowed(el) {
 }
 
 function reStyle(node) {
-    const blockEl = 'div'; //cang nhieu the thoi gian cang lau, co the len toi 10x thoi gian translate, de div la phu hop
+    const blockEl = 'div,li'; //cang nhieu the thoi gian cang lau, co the len toi 10x thoi gian translate, de div la phu hop
     if (node == document) node = document.body;
     node.querySelectorAll(blockEl).forEach(e => { if (isOverflowed(e)) e.style.overflow = 'hidden'; })
 }
@@ -120,7 +120,7 @@ function loadOptions(fn) {
     return chrome.runtime.sendMessage({ 'action': 'loadOptions', 'payload': '' }).then(fn);
 }
 
-let lang, percent;
+let lang = '', percent = '';
 if (document.getElementsByTagName('html')[0].getAttribute('lang')?.includes('zh')) lang = 'zh';
 let charset = document.querySelector('meta[charset]')?.getAttribute('charset').toLowerCase();
 if (charset == undefined || !charset.includes('gb')) {
@@ -132,7 +132,7 @@ else chrome.i18n.detectLanguage(document.title, (langInfo) => {
     langInfo.languages.forEach(l => {
         lang = l.language;
         percent = l.percentage;
-        return;  //Escape from forEach
+        return;
     })
 });
 
@@ -145,7 +145,7 @@ loadOptions((mess) => {
         return skip || reg.test(window.location.hostname);
     }, false);
 
-    if (lang.includes('zh') && Options.optionAutoTrans && !skipWeb) {
+    if (lang?.includes('zh') && Options.optionAutoTrans && !skipWeb) {
         // const observer = new MutationObserver(oCb);
         // observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 
@@ -165,7 +165,7 @@ loadOptions((mess) => {
         btnTranslate.style.zIndex = '9999999';
         btnTranslate.innerText = 'Translate'
         document.body.appendChild(btnTranslate); //Tai sao khong them vao???
-        btnTranslate.onclick = () => { translateNode(document); }
+        btnTranslate.onclick = () => { translateNode(document.body); }
     }
 });
 
